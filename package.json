@@ -4,6 +4,7 @@
   "description": "A template for a v14 discord js bot, supporting interaction, text and slash commands",
   "main": "main.js",
   "scripts": {
+    "setup": "node setup",
     "start": "node main"
   },
   "repository": {
