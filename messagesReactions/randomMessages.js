@@ -1,7 +1,7 @@
 function randomMessages(client, message) {
     switch(message.content) {
-        case 'Hello':
-            message.reply("Hi");
+        case 'Nul':
+            message.reply(":4983pepediamondsword:");
             break;
         case 'Test':
             message.reply("Yes thats a test");

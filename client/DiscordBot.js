@@ -6,6 +6,7 @@ const CommandsListener = require("./handlers/CommandsListener")
 const InteractionsHandler = require("./handlers/InteractionsHandler");
 const InteractionsListener = require("./handlers/InteractionsListener");
 const { loadEvents } = require("./handlers/Events")
+const axios = require('axios');
 
 const DatabaseConnection = require("../utils/SQLRequest")
 
@@ -68,7 +69,7 @@ class DiscordBot extends Client {
     startStatusRotation = () => {
         let index = 0;
         setInterval(() => {
-            this.user.setPresence({ activities: [this.statusMessages[index]] });
+            this.user.setPresence({ activities: [(this.statusMessages[index]).replace("%players%", getConnectedPlayers())] });
             index = (index + 1) % this.statusMessages.length;
         }, settings.status.switch_delay);
     }
@@ -136,3 +137,29 @@ class DiscordBot extends Client {
 }
 
 module.exports = DiscordBot;
+
+async function getConnectedPlayers() {
+    try {
+        const response = await axios.get(
+            `${process.env.PTERO_SERVER_URL}/api/client/servers/${process.env.SERVER_ID}/resources`,
+            {
+                headers: {
+                    Authorization: `Bearer ${process.env.PTERO_API_KEY}`,
+                    'Accept': 'Application/vnd.pterodactyl.v1+json'
+                }
+            }
+        );
+
+        const isOnline = response.data.attributes.current_state === 'running';
+
+        if (isOnline) {
+            const players = response.data.attributes.resources.players || 0;
+            return players;
+        } else {
+            return 0;
+        }
+    } catch (error) {
+        console.error('Erreur lors de la récupération du statut du serveur :', error.response?.data || error.message);
+        return null;
+    }
+}

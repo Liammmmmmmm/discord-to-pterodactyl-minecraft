@@ -1,30 +1,30 @@
 const settings = {
     development: {
         enabled: false, // If true, the bot will register all application commands to a specific guild (not globally).
-        guildIds: ["Development Guild", "Another dev guild"],
+        guildIds: ["727581589537554534"],
         debug: true, // Display or not more info
         logFile: true
     },
     commands: {
-        prefix: "?" // Default prefix of the command messages.
+        prefix: "!mc" // Default prefix of the command messages.
     },
     users: {
-        ownerId: "Your account ID", // The bot owner ID, which is you.
+        ownerId: "516993045724528663", // The bot owner ID, which is you.
     },
     messages: { // Messages when language is unreachable.
-        defaultLang: "en",
+        defaultLang: "fr",
         DATABASE_ERROR: "A database error orccured"
     },
     bot: { // Useless if you don't use webhooks
-        name: "Your bot name",
+        name: "Mr puant",
         icon: "https://c.clc2l.com/t/d/i/discord-4OXyS2.png"
     },
     status: {
         statusMessages: [
-            { name: 'Status 1', type: 3 },
-            { name: 'Status 2', type: 4 },
+            { name: 'les joueurs', type: 3 },
+            { name: '%players%/999 connectés', type: 4 },
         ],
-        switch_delay: 10000,       
+        switch_delay: 10000,
     }
 }
 

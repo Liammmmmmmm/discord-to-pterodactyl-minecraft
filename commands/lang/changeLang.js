@@ -9,7 +9,7 @@ let formatedLangList = languages.map(el => ({name: el, value: el}));
 module.exports = {
     name: commandName,
     aliases: ["setlang"],
-    help: 1,
+    help: 0,
     message: async (client, message, args) => {
         const text = new Txt();
         await text.init(message.author.id);
