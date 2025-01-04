@@ -1,0 +1,34 @@
+{
+  "name": "discord-js-template-v14",
+  "version": "1.0.0",
+  "description": "A template for a v14 discord js bot, supporting interaction, text and slash commands",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Liammmmmmmm/discord-js-template-v14.git"
+  },
+  "keywords": [
+    "discord",
+    "template",
+    "js",
+    "bot",
+    "v14",
+    "mysql"
+  ],
+  "author": "Liam",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Liammmmmmmm/discord-js-template-v14/issues"
+  },
+  "homepage": "https://github.com/Liammmmmmmm/discord-js-template-v14#readme",
+  "dependencies": {
+    "colors": "^1.4.0",
+    "discord.js": "^14.15.3",
+    "dotenv": "^16.4.5",
+    "fs": "0.0.1-security",
+    "mysql": "^2.18.1"
+  }
+}
