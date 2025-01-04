@@ -50,6 +50,13 @@ const texts = {
         success: "Webhook creado exitosamente.",
         error: "Ocurrió un error.",
     },
+    link: {
+        description: "Lier son compte Mincraft au Server Discrd",
+        advancedDesc: "Changer le préfixe du bot. (/setprefix newprefix, longueur max 25 caractères)",
+        arg1: "Pseudo Minecraft",
+        reply: "Préfixe changé avec succès en : %PREFIX%.",
+        tooLong: "Votre nouveau préfixe dépasse les 25 caractères."
+    }
 };
 
 module.exports = { texts };

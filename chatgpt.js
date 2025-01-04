@@ -5,7 +5,7 @@ require('dotenv').config();
 const DISCORD_TOKEN = process.env.DISCORD_TOKEN;
 const PTERO_API_KEY = process.env.PTERO_API_KEY;
 const PTERO_SERVER_URL = process.env.PTERO_SERVER_URL;
-const SERVER_ID = process.env.SERVER_ID;
+const SERVER_ID = process.env.PTERO_SERVER_ID;
 
 const client = new Client({
     intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent]
