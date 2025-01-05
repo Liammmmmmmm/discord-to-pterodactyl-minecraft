@@ -116,6 +116,7 @@ const texts = {
         argshort: "Identifiant de la team",
         success: "Equipe rejoint avec succès",
         error: "Une erreur s'est produite",
+        alreadyInATeam: "Vous êtes déjà dans une équipe, contaxtez un admin pour en changer",
     },
     teamlist: {
         description: "Liste les teams",
@@ -130,6 +131,19 @@ const texts = {
         error: "Une erreur s'est produite",
         noTeam: "L'indentifiant de l'équipe est invalide",
         notLinked: "veuillez lier votre compte minecraft avec discord (/link pseudo)",
+    },
+    leaderboard: {
+        description: "Leaderboard",
+        advancedDesc: "Tu te demande qui est le plus gros puant du serv, toutes les réponses sont ici",
+        argtype: "Categorie de classement",
+        argteam: "Categorie de classement",
+        invalidArg: "Argument invalide",
+    },
+    leaveteam: {
+        description: "Enlever qq d'une équipe !",
+        success: "Fait !",
+        arg1: "Utilisateur à enlever",
+        noTeam: "L'utilisateur n'a pas d'équipe"
     }
 };
 

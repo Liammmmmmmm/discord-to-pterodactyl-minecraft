@@ -1,6 +1,6 @@
 const { Txt, languages } = require("../../langs/langs.js");
 const { settings } = require("../../settings.js");
-const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits, PermissionsBitField, ChannelType  } = require('discord.js');
 const { validArgAmount } = require("../../utils/random.js");
 const { debug } = require("../../utils/Console.js")
 const pterodactylClient = require('../../utils/PteroRequest.js');
@@ -88,8 +88,11 @@ async function executeCMD(client, message, args, text) {
                         
                     message.reply(text.get(commandName, "success"));
 
-                    const resRoleID = await message.guild.roles.create({ name: args., reason: 'Creating new role', color: formattedColorList.find((color) => color.value === 'gold').hex })
+                    const resRoleID = await message.guild.roles.create({ name: args.name, reason: 'Role for Minecraft Team : ' + args.slug, color: formattedColorList.find((color) => color.value == args.color).hex })
                     message.member.roles.add(resRoleID);
+
+                    // Create Catégory
+                    createCategory(message, args.name, resRoleID.id)
 
                     client.database.request('INSERT INTO teams (server_id, user_id, name, slug, color, executed, role_id) VALUES (?, ?, ?, ?, ?, ?, ?)', [message.guild.id, message.author.id, args.name, args.slug, args.color, servopen, resRoleID.id]).then(resInsetTeam => {
                         client.database.request('UPDATE minecraft SET team_id = ? WHERE user_id = ? AND server_id = ?', [resInsetTeam.insertId, message.author.id, message.guild.id])
@@ -101,4 +104,43 @@ async function executeCMD(client, message, args, text) {
         }
     });
 
+}
+
+const createCategory = async (message, catName, roleId) => {
+    // const roleId = '1325553848714002442';
+
+    const category = await message.guild.channels.create({
+        name: catName,
+        type: 4,
+        permissionOverwrites: [
+            {
+                id: message.guild.id,
+                deny: [PermissionsBitField.Flags.ViewChannel],
+            },
+            {
+                id: roleId,
+                allow: [
+                    PermissionsBitField.Flags.ViewChannel,
+                    PermissionsBitField.Flags.ManageChannels,
+                    PermissionsBitField.Flags.ManageMessages
+                ]
+            },
+        ],
+    });
+
+    const defaultTextuelChannel = await message.guild.channels.create({
+        name: 'Private',
+        type: ChannelType.GuildText,
+        parent: category.id,
+    });
+
+    
+    await defaultTextuelChannel.send(`<@&${roleId}> Vous avez désormet accès à ce channel privé ! \nSeul vous et votre équipe avez accès a cette carégorie vous pouvez y faire ce que vous voulez (crée des channel ou les supprimer)!`);
+
+
+    const defaultVocalChannel = await message.guild.channels.create({
+        name: 'Voc',
+        type: ChannelType.GuildVoice,
+        parent: category.id,
+    });
 }

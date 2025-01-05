@@ -32,7 +32,7 @@ const settings = {
 const globalEmbedHeader = {
     author: "%SERVER_NAME%",
     authorImageURL: "%SERVER_IMAGE%",
-    authorURL: "https://exemple.com",
+    authorURL: "https://cheznestor.fr",
     thumbnail: "https://cdn.discordapp.com/icons/1161392271531458611/d4aa2ce36e3b409b8c059c0779fea5c4.webp?size=512"
 }
 

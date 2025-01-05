@@ -50,8 +50,6 @@ async function executeCMD(client, message, args, text) {
 
 			client.database.request('UPDATE teams SET executed = ? WHERE server_id = ? AND id = ?', [executed, message.guild.id, element.id]);
 		})
-
-        message.reply(text.get(commandName, "serverOpened", {PLAYERCOUNT: request.length}));
     })
     client.database.request('SELECT minecraft.*, teams.slug FROM minecraft LEFT JOIN teams ON minecraft.team_id = teams.id WHERE minecraft.server_id = ? AND minecraft.executed = 0', [message.guild.id])
     .then((request) => {

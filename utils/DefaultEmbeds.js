@@ -62,20 +62,32 @@ class DefaultEmbed extends EmbedBuilder {
 
         if (embeds[embed].color) this.setColor('#dbaf00');
         if (embeds[embed].footer) {
-            this.setFooter({
-                text: replaceVariables(embeds[embed].footer.text, variables),
-                iconURL: replaceVariables(embeds[embed].footer.imageURL, variables)
-            });
+            const footerText = replaceVariables(embeds[embed].footer.text, variables);
+            const footerIconURL = replaceVariables(embeds[embed].footer.imageURL, variables);
+            if (footerText) {
+                this.setFooter({
+                    text: footerText,
+                    iconURL: footerIconURL || undefined
+                });
+            }
             if (embeds[embed].footer.timestamp) this.setTimestamp();
         }
         if (embeds[embed].header) {
-            this.setAuthor({
-                name: replaceVariables(embeds[embed].header.author, variables),
-                iconURL: replaceVariables(embeds[embed].header.authorImageURL, variables),
-                url: replaceVariables(embeds[embed].header.authorURL, variables)
-            });
+            const authorName = replaceVariables(embeds[embed].header.author, variables);
+            const authorIconURL = replaceVariables(embeds[embed].header.authorImageURL, variables);
+            const authorURL = replaceVariables(embeds[embed].header.authorURL, variables);
+            if (authorName) {
+                this.setAuthor({
+                    name: authorName,
+                    iconURL: authorIconURL || undefined,
+                    url: authorURL || undefined
+                });
+            }
             if (embeds[embed].header.thumbnail) {
-                this.setThumbnail(replaceVariables(embeds[embed].header.thumbnail, variables));
+                const thumbnailURL = replaceVariables(embeds[embed].header.thumbnail, variables);
+                if (thumbnailURL) {
+                    this.setThumbnail(thumbnailURL);
+                }
             }
         }
 

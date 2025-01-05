@@ -36,7 +36,6 @@ const DiscordBot = require("../../client/DiscordBot.js");
  */
 async function executeCMD(client, message, args, text) {    
     client.database.request('SELECT teams.*, minecraft.pseudo FROM teams LEFT JOIN minecraft ON teams.id = minecraft.team_id', []).then(async res => {
-        console.log(res)
         let teams = {};
 
         res.forEach(element => {

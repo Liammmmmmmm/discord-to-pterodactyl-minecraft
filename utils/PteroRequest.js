@@ -166,6 +166,20 @@ class PterodactylClient {
     }
 
     /**
+     * Leave une team.
+     * @returns {Promise<boolean>} - True si l'action a réussi, sinon false.
+     */
+    async leaveTeam(teamshort, playername) {
+        try {
+            let response = await this.postCommand(`team leave ${playername}`);
+            return true;
+        } catch (error) {
+            debug.error('Erreur lors de lenlevement dun joueur a une team :', error.message);
+            return false;
+        }
+    }
+
+    /**
      * Cree une team.
      * @returns {Promise<boolean>} - True si l'action a réussi, sinon false.
      */
@@ -189,6 +203,28 @@ class PterodactylClient {
         } catch (error) {
             debug.error('Erreur lors de la creation dune team :', error.message);
             return false;
+        }
+    }
+
+    async listFileStats() {
+        try {
+            const { data } = await this._getRequest(`servers/${this.serverId}/files/list?directory=%2Fworld%2Fstats`);
+
+            return data.data.map(file => file.attributes);
+        } catch (error) {
+            debug.error('Erreur lors de la récupération du statut du serveur :', error.message);
+            return null;
+        }
+    }
+
+    async readStatsFile(filename) {
+        try {
+            const { data } = await this._getRequest(`servers/${this.serverId}/files/contents?file=%2Fworld%2Fstats%2F${filename}`);
+
+            return data;
+        } catch (error) {
+            debug.error('Erreur lors de la récupération du statut du serveur :', error.message);
+            return null;
         }
     }
 }
