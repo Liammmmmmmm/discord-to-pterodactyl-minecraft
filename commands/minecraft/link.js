@@ -62,7 +62,7 @@ async function executeCMD(client, message, args, text) {
                 
                 if(executed) {
                     const data = await pterodactylClient.addWhiteList(args.pseudo);
-                    if (data.status !== 204) executed = 0
+                    if (!data) executed = 0
 
                     message.reply(text.get(commandName, "linkedWhiteList", {PSEUDO: args.pseudo}));
                 } else {

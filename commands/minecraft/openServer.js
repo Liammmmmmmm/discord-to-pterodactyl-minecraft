@@ -36,13 +36,34 @@ const DiscordBot = require("../../client/DiscordBot.js");
  * @param {Txt} text 
  */
 async function executeCMD(client, message, args, text) {
-    client.database.request('SELECT * FROM minecraft WHERE server_id = ? AND executed = 0', [message.guild.id])
+    client.database.request('SELECT * FROM teams WHERE executed = 0 AND server_id', [message.guild.id])
     .then((request) => {
-		request.forEach(async (element, i) => {
+		request.forEach(async (element) => {
             let executed = 0
-			const data = await pterodactylClient.addWhiteList(element.pseudo);
+			let data = await pterodactylClient.createTeamOnly(element.name, element.slug, element.color);
             
-            if (data.status === 204)
+            if (data)
+            {
+                debug.info(`✅ Team ${element.slug} has been created !`);
+                executed = 1
+            }
+
+			client.database.request('UPDATE teams SET executed = ? WHERE server_id = ? AND id = ?', [executed, message.guild.id, element.id]);
+		})
+
+        message.reply(text.get(commandName, "serverOpened", {PLAYERCOUNT: request.length}));
+    })
+    client.database.request('SELECT minecraft.*, teams.slug FROM minecraft LEFT JOIN teams ON minecraft.team_id = teams.id WHERE minecraft.server_id = ? AND minecraft.executed = 0', [message.guild.id])
+    .then((request) => {
+		request.forEach(async (element) => {
+            let executed = 0
+			let data = await pterodactylClient.addWhiteList(element.pseudo);
+
+            let data2 = 1;
+            if (element.team_id)
+                data2 = await pterodactylClient.joinTeam(element.slug, element.pseudo);
+            
+            if (data && data2)
                 executed = 1
 
             debug.info(`✅ User ${element.pseudo} has been add to WhiteList !`)

@@ -38,7 +38,7 @@ class DatabaseConnection {
             database: database
         };
     }
-
+    
     /**
      * Request an element from the database, with your sql and the params
      * @param {string} sql The sql request (? replace param)

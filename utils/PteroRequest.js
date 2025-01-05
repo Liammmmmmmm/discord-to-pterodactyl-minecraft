@@ -22,7 +22,7 @@ class PterodactylClient {
                     'Accept': `Application/vnd.pterodactyl.${this.apiVersion}+json`
                 }
             });
-            return response.data;
+            return response;
         } catch (error) {
             debug.error('Erreur lors de la requête API Pterodactyl :', error.response?.data || error.message);
             throw error;
@@ -57,7 +57,7 @@ class PterodactylClient {
             debug.info('Commande envoyée avec succès.');
         else
             debug.error(`Erreur inattendue`);
-        return response;
+        return response.status == 204 ? true : false;
     }
 
     async addWhiteList(pseudo) {
@@ -74,7 +74,8 @@ class PterodactylClient {
      */
     async getServer() {
         try {
-            const data = await this._getRequest(`servers/${this.serverId}/resources`);
+            const { data } = await this._getRequest(`servers/${this.serverId}/resources`);
+
             return data.attributes;
         } catch (error) {
             debug.error('Erreur lors de la récupération du statut du serveur :', error.message);
@@ -88,20 +89,19 @@ class PterodactylClient {
      * @returns {boolean} - True si le serveur est en ligne, sinon false.
      */
     serverIsOnline(server) {
-        return server?.current_state === 'running';
+        return server?.current_state == 'running';
     }
 
     /**
      * Récupère le nombre de joueurs connectés au serveur.
      * @returns {Promise<number|null>} - Le nombre de joueurs connectés ou null en cas d'erreur.
      */
-    async getConnectedPlayers() {
+    async getServerStats() {
         const server = await this.getServer();
-
-        if (server && this.serverIsOnline(server)) {
-            return server.resources?.players || 0;
-        } else {
-            return 0; // Serveur hors ligne ou erreur.
+        
+        return {
+            cpu: server.resources?.cpu_absolute || 0,
+            mem: (server.resources?.memory_bytes / 1024 / 1024 / 1024) || 0
         }
     }
 
@@ -147,6 +147,47 @@ class PterodactylClient {
             return true;
         } catch (error) {
             debug.error('Erreur lors du redémarrage du serveur :', error.message);
+            return false;
+        }
+    }
+
+     /**
+     * Join une team.
+     * @returns {Promise<boolean>} - True si l'action a réussi, sinon false.
+     */
+     async joinTeam(teamshort, playername) {
+        try {
+            let response = await this.postCommand(`team join ${teamshort.toLowerCase()} ${playername}`);
+            return true;
+        } catch (error) {
+            debug.error('Erreur lors de lajout dun joueur a une team :', error.message);
+            return false;
+        }
+    }
+
+    /**
+     * Cree une team.
+     * @returns {Promise<boolean>} - True si l'action a réussi, sinon false.
+     */
+    async createTeam(teamname, teamshort, teamcolor, playername) {
+        try {
+            let response = await this.postCommand(`team add ${teamshort.toLowerCase()} {"text":"<","color":"white","extra":[{"text":"${teamname}","color":"${teamcolor}"},{"text":">","color":"white"}]}`);
+            let response2 = this.joinTeam(teamshort, playername);
+            let response3 = await this.postCommand(`team modify ${teamshort.toLowerCase()} prefix {"text":"[","color":"white","extra":[{"text":"${teamshort}","color":"${teamcolor}"},{"text":"] ","color":"white"}]}`);
+            return (response && response2 && response3);
+        } catch (error) {
+            debug.error('Erreur lors de la creation dune team :', error.message);
+            return false;
+        }
+    }
+
+    async createTeamOnly(teamname, teamshort, teamcolor) {
+        try {
+            let response = await this.postCommand(`team add ${teamshort.toLowerCase()} {"text":"<","color":"white","extra":[{"text":"${teamname}","color":"${teamcolor}"},{"text":">","color":"white"}]}`);
+            let response2 = await this.postCommand(`team modify ${teamshort.toLowerCase()} prefix {"text":"[","color":"white","extra":[{"text":"${teamshort}","color":"${teamcolor}"},{"text":"] ","color":"white"}]}`);
+            return (response && response2);
+        } catch (error) {
+            debug.error('Erreur lors de la creation dune team :', error.message);
             return false;
         }
     }

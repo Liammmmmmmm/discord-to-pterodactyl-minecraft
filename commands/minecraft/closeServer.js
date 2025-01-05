@@ -42,7 +42,7 @@ async function executeCMD(client, message, args, text) {
             let executed = 1
 			const data = await pterodactylClient.removeWhiteList(element.pseudo);
             
-            if (data.status === 204)
+            if (data)
                 executed = 0;
 
             debug.info(`✅ User ${element.pseudo} has been removd from whiteList !`)

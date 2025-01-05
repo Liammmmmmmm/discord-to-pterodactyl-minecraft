@@ -4,6 +4,7 @@ const texts = {
         notEnoughArgs: "Pas assez d'arguments ! Besoin de %REQUIRED_AMOUNT%, reçu %RECEIVED_AMOUNT%.",
         error: "Une erreur s'est produite.",
         notEnoughPermAdmin: "Vous n'êtes pas administrateur du serveur.",
+        noMessageCommand: "Cette commande n'est disponnible qu'en command slash (/%COMMAND%).",
     },
     categories: { // Liste des dossiers de commandes et une description de leur contenu. Utilisé dans /help généré automatiquement
         lang: "Commandes utilitaires pour la langue du bot.",
@@ -77,6 +78,58 @@ const texts = {
         advancedDesc: "Execute une commande.",
         success: "La commande a bien été envoyée",
         error: "Une erreur s'est produite",
+    },
+    shutdown: {
+        description: "Eteint le serveur",
+        advancedDesc: "Eteint le serveur.",
+        success: "Serveur eteint",
+        error: "Une erreur s'est produite",
+    },
+    startup: {
+        description: "Allume le serveur",
+        advancedDesc: "Allume le serveur.",
+        success: "Serveur eteint",
+        error: "Une erreur s'est produite",
+    },
+    sendmsg: {
+        description: "Envoie un message dans le serveur minecraft",
+        advancedDesc: "Envoie un message dans le serveur minecraft, avec votre pseudo et une précision via discord.",
+        arg1: "Message a envoyer",
+        success: "Message envoyé",
+        error: "Une erreur s'est produite",
+        notLinked: "veuillez lier votre compte minecraft avec discord (/link pseudo)",
+    },
+    teamcreate: {
+        description: "Créé ta propre team",
+        advancedDesc: "Créé ta team pour avoir un joli petit truc devant ton pseudo et pour montrer ton appartenance a une super equipe.",
+        argfullname: "Nom de ton equipe",
+        argshort: "Nom a afficher devant ton pseudo",
+        argcolor: "Couleur de ton equipe",
+        success: "Equipe créé avec succès",
+        error: "Une erreur s'est produite",
+        alreadyTakenName: "L'indentifiant de l'équipe est déjà pris",
+        notLinked: "veuillez lier votre compte minecraft avec discord (/link pseudo)",
+    },
+    teamjoin: {
+        description: "Rejoin une team",
+        advancedDesc: "Rejoin une team pour avoir un joli petit truc devant ton pseudo et pour montrer ton appartenance a une super equipe.",
+        argshort: "Identifiant de la team",
+        success: "Equipe rejoint avec succès",
+        error: "Une erreur s'est produite",
+    },
+    teamlist: {
+        description: "Liste les teams",
+        advancedDesc: "Liste les teams existantes, laquelle vas tu rejoindre ?",
+        error: "Une erreur s'est produite",
+    },
+    commandtest: {
+        description: "Rejoin une team",
+        advancedDesc: "Rejoin une team pour avoir un joli petit truc devant ton pseudo et pour montrer ton appartenance a une super equipe.",
+        argshort: "Identifiant de la team",
+        success: "Equipe rejoint avec succès",
+        error: "Une erreur s'est produite",
+        noTeam: "L'indentifiant de l'équipe est invalide",
+        notLinked: "veuillez lier votre compte minecraft avec discord (/link pseudo)",
     }
 };
 

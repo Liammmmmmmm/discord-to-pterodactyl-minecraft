@@ -5,17 +5,16 @@ const { validArgAmount } = require("../../utils/random.js");
 const { debug } = require("../../utils/Console.js")
 const pterodactylClient = require('../../utils/PteroRequest.js');
 
-const commandName = "cmd";
+const commandName = "shutdown";
 
 module.exports = {
     name: commandName,
     aliases: [],
-    help: 0,
+    help: 1,
     message: async (client, message, args) => {
         const text = new Txt();
         await text.init(message.author.id);
-		if(args.length < 1) return;
-        executeCMD(client, message, {command: args.join(" ")}, text);
+        executeCMD(client, message, {}, text);
     }
 }
 
@@ -29,9 +28,8 @@ const DiscordBot = require("../../client/DiscordBot.js");
  */
 async function executeCMD(client, message, args, text) {
 	if (!(message.author.id == "516993045724528663" || message.author.id == "600743734577201174")) return;
-	const data = await pterodactylClient.postCommand(args.command);
-	let executed = data ? 1 : 0
-	if (executed)
+	const data = await pterodactylClient.stopServer();
+	if (data)
 		message.reply(text.get(commandName, "success"));
 	else
 		message.reply(text.get(commandName, "error"));

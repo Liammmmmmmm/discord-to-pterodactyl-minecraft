@@ -22,7 +22,7 @@ const settings = {
     status: {
         statusMessages: [
             { name: 'les joueurs', type: 3 },
-            { name: '%players%/999 connectés', type: 4 },
+            { name: 'Cpu: %CPU%% | Mem: %MEM%Gb', type: 4 },
         ],
         switch_delay: 10000,
     }
