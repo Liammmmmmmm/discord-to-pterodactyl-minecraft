@@ -8,6 +8,7 @@ const texts = {
     categories: { // Liste des dossiers de commandes et une description de leur contenu. Utilisé dans /help généré automatiquement
         lang: "Commandes utilitaires pour la langue du bot.",
         utils: "Commandes utilitaires aléatoires.",
+        minecraft: "Commandes liés a minecraft.",
     },
     // Liste des commandes et des textes qui leur sont associés
     ping: { 
@@ -51,11 +52,31 @@ const texts = {
         error: "Une erreur s'est produite.",
     },
     link: {
-        description: "Lier son compte Mincraft au Server Discrd",
-        advancedDesc: "Changer le préfixe du bot. (/setprefix newprefix, longueur max 25 caractères)",
+        description: "Lier son compte Minecraft au Serveur Discord",
+        advancedDesc: "Set votre pseudo minecraft pour relier a votre discord.",
         arg1: "Pseudo Minecraft",
-        reply: "Préfixe changé avec succès en : %PREFIX%.",
-        tooLong: "Votre nouveau préfixe dépasse les 25 caractères."
+        reply: "Pseudo changé avec succès",
+        tooLong: "Votre pseudo dépasse les 25 caractères.",
+        tooShort: "Votre pseudo est trop court.",
+        alreadyLinked: "Votre compte est déjà lié.",
+        linkedWhiteList: "Votre compte %PSEUDO% a été lié avec succès, vous pouvez dès maintenant vous connecter au serveur.",
+        linkedNoWhiteList: "Votre compte %PSEUDO% a été lié avec succès, vous pourrez vous connecter a l'ouverture.",
+    },
+    openserver: {
+        description: "Ouvre le serveur",
+        advancedDesc: "Plus précisément, ajoute tous les joueurs enregistrés a la whitelist.",
+        serverOpened: "Le server a bien été ouvert (+%PLAYERCOUNT% Joueur ajouté a la Whitelist)"
+    },
+    closeserver: {
+        description: "Ferme le serveur",
+        advancedDesc: "Plus précisément, retire tous les joueurs enregistrés a la whitelist.",
+        serverClosed: "Le server a bien été fermé (%PLAYERCOUNT% Joueur retiré a la Whitelist)"
+    },
+    cmd: {
+        description: "Execute une commande",
+        advancedDesc: "Execute une commande.",
+        success: "La commande a bien été envoyée",
+        error: "Une erreur s'est produite",
     }
 };
 

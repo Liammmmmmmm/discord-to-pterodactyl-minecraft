@@ -1,10 +1,11 @@
 const { Txt, languages } = require("../../langs/langs.js");
 const { settings } = require("../../settings.js");
 const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
-const { validArgAmount } = require("../../utils/random");
+const { validArgAmount } = require("../../utils/random.js");
 const { debug } = require("../../utils/Console.js")
+const pterodactylClient = require('../../utils/PteroRequest.js');
 
-const commandName = "link";
+const commandName = "openserver";
 
 module.exports = {
     name: commandName,
@@ -13,35 +14,20 @@ module.exports = {
     message: async (client, message, args) => {
         const text = new Txt();
         await text.init(message.author.id);
-        if(validArgAmount(args, 1, text) != 1) return message.reply(validArgAmount(args, 1, text));
-
-        if(args[0].length > 16) {
-            message.reply(text.get(commandName, "tooLong"));
-        } else if(!message.member.permissions.has(PermissionFlagsBits.Administrator)) {
-            message.reply(text.get("global", "notEnoughPermAdmin"));
-        } else {
-            executeCMD(client, message, {pseudo: args[0]}, text);
-        } 
+        executeCMD(client, message, {}, text);
     },
     slash: new SlashCommandBuilder()
         .setName(commandName)
         .setDescription(require("../../langs/texts/" + settings.messages.defaultLang).texts[commandName].description)
-        .addStringOption(option =>
-            option.setName('pseudoMC')
-                .setDescription(require("../../langs/texts/" + settings.messages.defaultLang).texts[commandName].arg1)
-                .setRequired(true)
-                .setMaxLength(16)
-                .setMinLength(3)
-        )
         .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
         async execute(client, interaction) {
             const text = new Txt();
             await text.init(interaction.author.id);
-            await executeCMD(client, interaction, {pseudo: interaction.options.getString('pseudoMC')}, text);
+            await executeCMD(client, interaction, {}, text);
         },
 }
 
-const DiscordBot = require("../../client/DiscordBot");
+const DiscordBot = require("../../client/DiscordBot.js");
 /**
  * Execute the command with both slash and message command
  * @param {DiscordBot} client 
@@ -50,7 +36,21 @@ const DiscordBot = require("../../client/DiscordBot");
  * @param {Txt} text 
  */
 async function executeCMD(client, message, args, text) {
-    console.log(args)
+    client.database.request('SELECT * FROM minecraft WHERE server_id = ? AND executed = 0', [message.guild.id])
+    .then((request) => {
+		request.forEach(async (element, i) => {
+            let executed = 0
+			const data = await pterodactylClient.addWhiteList(element.pseudo);
+            
+            if (data.status === 204)
+                executed = 1
 
-    message.reply(text.get("global", "error"));
+            debug.info(`✅ User ${element.pseudo} has been add to WhiteList !`)
+
+			client.database.request('UPDATE minecraft SET executed = ? WHERE server_id = ? AND user_id = ?', [executed, message.guild.id, element.user_id]);
+		})
+
+        message.reply(text.get(commandName, "serverOpened", {PLAYERCOUNT: request.length}));
+    })
+	client.database.request('UPDATE servers SET server_mc_open = 1 WHERE server_id = ?', [message.guild.id]);
 }

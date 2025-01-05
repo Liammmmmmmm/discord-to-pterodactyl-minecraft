@@ -1,12 +1,12 @@
 const settings = {
     development: {
         enabled: false, // If true, the bot will register all application commands to a specific guild (not globally).
-        guildIds: ["727581589537554534"],
+        guildIds: ["727581589537554534", "1161392271531458611"],
         debug: true, // Display or not more info
         logFile: true
     },
     commands: {
-        prefix: "!mc" // Default prefix of the command messages.
+        prefix: "?" // Default prefix of the command messages.
     },
     users: {
         ownerId: "516993045724528663", // The bot owner ID, which is you.

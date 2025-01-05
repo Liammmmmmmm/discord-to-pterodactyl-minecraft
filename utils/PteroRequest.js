@@ -1,4 +1,5 @@
 const axios = require('axios');
+const { debug } = require("./Console");
 
 class PterodactylClient {
     constructor(serverUrl, serverId, apiKey) {
@@ -23,7 +24,7 @@ class PterodactylClient {
             });
             return response.data;
         } catch (error) {
-            console.error('Erreur lors de la requête API Pterodactyl :', error.response?.data || error.message);
+            debug.error('Erreur lors de la requête API Pterodactyl :', error.response?.data || error.message);
             throw error;
         }
     }
@@ -42,11 +43,29 @@ class PterodactylClient {
                     'Accept': `Application/vnd.pterodactyl.${this.apiVersion}+json`
                 }
             });
-            return response.data;
+            return response;
         } catch (error) {
-            console.error('Erreur lors de la requête POST API Pterodactyl :', error.response?.data || error.message);
+            debug.error('Erreur lors de la requête POST API Pterodactyl :', error.response?.data || error.message);
             throw error;
         }
+    }
+
+    async postCommand(command) {
+        const response = await this._postRequest(`servers/${this.serverId}/command`, { command });
+
+        if (response.status === 204)
+            debug.info('Commande envoyée avec succès.');
+        else
+            debug.error(`Erreur inattendue`);
+        return response;
+    }
+
+    async addWhiteList(pseudo) {
+        return await this.postCommand(`whitelist add ${pseudo}`)
+    }
+
+    async removeWhiteList(pseudo) {
+        return await this.postCommand(`whitelist remove ${pseudo}`)
     }
 
     /**
@@ -58,7 +77,7 @@ class PterodactylClient {
             const data = await this._getRequest(`servers/${this.serverId}/resources`);
             return data.attributes;
         } catch (error) {
-            console.error('Erreur lors de la récupération du statut du serveur :', error.message);
+            debug.error('Erreur lors de la récupération du statut du serveur :', error.message);
             return null;
         }
     }
@@ -93,10 +112,10 @@ class PterodactylClient {
     async startServer() {
         try {
             await this._postRequest(`servers/${this.serverId}/power`, { signal: 'start' });
-            console.log('Serveur démarré avec succès.');
+            debug.info('Serveur démarré avec succès.');
             return true;
         } catch (error) {
-            console.error('Erreur lors du démarrage du serveur :', error.message);
+            debug.error('Erreur lors du démarrage du serveur :', error.message);
             return false;
         }
     }
@@ -108,10 +127,10 @@ class PterodactylClient {
     async stopServer() {
         try {
             await this._postRequest(`servers/${this.serverId}/power`, { signal: 'stop' });
-            console.log('Serveur arrêté avec succès.');
+            debug.info('Serveur arrêté avec succès.');
             return true;
         } catch (error) {
-            console.error('Erreur lors de l\'arrêt du serveur :', error.message);
+            debug.error('Erreur lors de l\'arrêt du serveur :', error.message);
             return false;
         }
     }
@@ -124,10 +143,10 @@ class PterodactylClient {
         try {
             await this.stopServer();
             await this.startServer();
-            console.log('Serveur redémarré avec succès.');
+            debug.info('Serveur redémarré avec succès.');
             return true;
         } catch (error) {
-            console.error('Erreur lors du redémarrage du serveur :', error.message);
+            debug.error('Erreur lors du redémarrage du serveur :', error.message);
             return false;
         }
     }
