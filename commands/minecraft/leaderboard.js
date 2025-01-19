@@ -12,7 +12,7 @@ const lBList = [
     { name: 'Temps de jeu', value: 'time_played', caca: 'minecraft:play_time'},
     { name: 'Distance parcourue', value: 'total_distance'},
     { name: 'Nombre de morts', value: 'death_count'},
-    { name: 'Richesse (juifance)', value: 'juifance'},
+    { name: 'Richesse', value: 'richesse'},
 ];
 
 module.exports = {
@@ -59,7 +59,7 @@ const DiscordBot = require("../../client/DiscordBot.js");
 async function executeCMD(client, message, args, text) {
     let stats = [];
 
-    if (args.type == "juifance") return juifanceldb(client, message, args, text);
+    if (args.type == "richesse") return richesseldb(client, message, args, text);
 
     let filelist = await pterodactylClient.listFileStats();
 
@@ -153,7 +153,7 @@ function sortStatsByTotalDistance(statslist) {
     });
 }
 
-async function juifanceldb(client, message, args, text)
+async function richesseldb(client, message, args, text)
 {
     let res;
 
