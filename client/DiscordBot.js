@@ -70,16 +70,16 @@ class DiscordBot extends Client {
 
     startStatusRotation = () => {
         let index = 0;
-        setInterval(async () => {
-            const serverStats = await pterodactylClient.getServerStats()
-            const currentActivitie = {
-                ...this.statusMessages[index],
-                name: this.statusMessages[index].name.replace("%CPU%", serverStats.cpu.toFixed(1)).replace("%MEM%", serverStats.mem.toFixed(1))
-            }
+        // setInterval(async () => {
+        //     const serverStats = await pterodactylClient.getServerStats()
+        //     const currentActivitie = {
+        //         ...this.statusMessages[index],
+        //         name: this.statusMessages[index].name.replace("%CPU%", serverStats.cpu.toFixed(1)).replace("%MEM%", serverStats.mem.toFixed(1))
+        //     }
 
-            this.user.setPresence({ activities: [currentActivitie] });
-            index = (index + 1) % this.statusMessages.length;
-        }, settings.status.switch_delay);
+        //     this.user.setPresence({ activities: [currentActivitie] });
+        //     index = (index + 1) % this.statusMessages.length;
+        // }, settings.status.switch_delay);
     }
 
     connect = async () => {

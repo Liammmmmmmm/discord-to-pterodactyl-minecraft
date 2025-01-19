@@ -12,6 +12,7 @@ const lBList = [
     { name: 'Temps de jeu', value: 'time_played', caca: 'minecraft:play_time'},
     { name: 'Distance parcourue', value: 'total_distance'},
     { name: 'Nombre de morts', value: 'death_count'},
+    { name: 'Richesse (juifance)', value: 'juifance'},
 ];
 
 module.exports = {
@@ -41,7 +42,9 @@ module.exports = {
     async execute(client, interaction) {
         const text = new Txt();
         await text.init(interaction.author.id);
+        await interaction.deferReply();
         await executeCMD(client, interaction, {type: interaction.options.getString('type'), team: interaction.options.getBoolean('team')}, text);
+        interaction.editReply({ content: "Done!", ephemeral: true });
     },
 }
 
@@ -55,6 +58,9 @@ const DiscordBot = require("../../client/DiscordBot.js");
  */
 async function executeCMD(client, message, args, text) {
     let stats = [];
+
+    if (args.type == "juifance") return juifanceldb(client, message, args, text);
+
     let filelist = await pterodactylClient.listFileStats();
 
     for (element of filelist) {
@@ -145,4 +151,36 @@ function sortStatsByTotalDistance(statslist) {
     return statslist.slice(0, 10).map((element) => {
         return {pseudo: element.pseudo, stat: (getTotalDistance(element.stats) / 100000).toFixed(2) + "km"};
     });
+}
+
+async function juifanceldb(client, message, args, text)
+{
+    let res;
+
+    if (args.team)
+    {
+        res = await client.database.request(`
+            SELECT teams.id, teams.name AS pseudo, SUM(minecraft.leaderboard) AS leaderboard
+            FROM teams
+            LEFT JOIN minecraft ON teams.id = minecraft.team_id
+            GROUP BY teams.id, teams.name
+            ORDER BY leaderboard DESC
+            LIMIT 10
+        `, []);
+    }
+    else
+    {
+        res = await client.database.request('SELECT * FROM minecraft ORDER BY leaderboard DESC LIMIT 10', []);
+    }
+
+    let messageToSend = res.map((element, index) => {
+        return `${index + 1}. **${element.pseudo}** : ${element.leaderboard}`;
+    }).join("\n");
+
+    const embed = new DefaultEmbed()
+    .setDefault('primary', message)
+    .setTitle('Leaderboard')
+    .setDescription(`__Voici la liste des plus gros ~~jui~~ riches du serveur__\n\n${messageToSend}`);
+
+    message.channel.send({ embeds: [embed] });
 }
